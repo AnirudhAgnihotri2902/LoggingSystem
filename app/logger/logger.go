@@ -1,4 +1,4 @@
-package log
+package logger
 
 import (
 	"context"
@@ -19,7 +19,6 @@ type Logger interface {
 	Info(msg string, fields ...Field)
 	Debug(msg string, fields ...Field)
 	Error(msg string, fields ...Field)
-	//With(key string, value string)
 	Warn(msg string, fields ...Field)
 }
 
@@ -31,7 +30,8 @@ type LoggerImpl struct {
 func addContextFieldsToLogs(ctx context.Context, fields ...Field) []Field {
 	fields = append(fields, zap.Any("request_id", ctx.Value("requestID")))
 	fields = append(fields, zap.Any("user_id", ctx.Value("userID")))
-	//fields = append(fields, zap.Any("request_id", ctx.Value("trace_id")))
+	fields = append(fields, zap.Any("request_id", ctx.Value("trace_id")))
+	fields = append(fields, zap.Any("trace_id", ctx.Value("trace_id")))
 	return fields
 }
 
@@ -125,18 +125,16 @@ func New(level zapcore.Level, serviceName, environment string) (Logger, error) {
 		"service": serviceName,
 		"env":     environment,
 	}
-
 	logger, err := config.Build()
 	if err != nil {
 		return nil, err
 	}
-
 	return &LoggerImpl{
 		logger: otelzap.New(logger.WithOptions(zap.AddCallerSkip(1)),
 			otelzap.WithMinLevel(zap.InfoLevel),
-			//otelzap.WithExtraFields(zapcore.Field{Key: "user_id", Type: zapcore.StringType}),
 			otelzap.WithCallerDepth(1),
 			otelzap.WithTraceIDField(true),
+			otelzap.WithStackTrace(true),
 		),
 	}, nil
 }

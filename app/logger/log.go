@@ -1,11 +1,12 @@
-package logger
+package log
 
 import (
 	"context"
 	"fmt"
-	"github.com/uptrace/opentelemetry-go-extra/otelzap"
 	"net/http"
 	"strings"
+
+	"github.com/uptrace/opentelemetry-go-extra/otelzap"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"

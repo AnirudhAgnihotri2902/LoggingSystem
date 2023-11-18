@@ -1,0 +1,23 @@
+export
+
+# Setup Go Variables
+GOPATH := $(shell go env GOPATH)
+GOBIN := $(PWD)/bin
+ifneq ($(GOPRIVATE),)
+	GOPRIVATE:= $(GOPRIVATE),
+endif
+GOPRIVATE := $(GOPRIVATE)github.com/density
+
+# Invoke shell with new path to enable access to bin
+PATH := $(GOBIN):$(PATH)
+#SHELL := env PATH=$(PATH) bash
+
+
+.PHONY: dependencies
+dependencies:
+	@./scripts/dependencies.sh
+
+.PHONY: run
+run:
+	. .envrc.sample && go run cmd/server/main.go
+

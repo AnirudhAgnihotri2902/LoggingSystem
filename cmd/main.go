@@ -1,8 +1,7 @@
 package main
 
 import (
-	elasticsearch "github.com/elastic/go-elasticsearch/v8"
-	"log"
+	logstash_logger "github.com/KaranJagtiani/go-logstash"
 	"os"
 )
 
@@ -18,15 +17,17 @@ func main() {
 }
 
 func realMain(args []string) int {
-	es, err := elasticsearch.NewDefaultClient()
-	if err != nil {
-		log.Fatalf("Error creating the client: %s", err)
+	logger := logstash_logger.Init("localhost", 9600, "tcp", 5)
+
+	payload := map[string]interface{}{
+		"message": "TEST_MSG",
+		"error":   false,
 	}
-	log.Println(elasticsearch.Version)
-	res, err := es.Info()
-	if err != nil {
-		log.Fatalf("Error getting response: %s", err)
-	}
-	defer res.Body.Close()
+
+	logger.Log(payload)   // Generic log
+	logger.Info(payload)  // Adds "severity": "INFO"
+	logger.Debug(payload) // Adds "severity": "DEBUG"
+	logger.Warn(payload)  // Adds "severity": "WARN"
+	logger.Error(payload) // Adds "severity": "ERROR"
 	return exitOK
 }

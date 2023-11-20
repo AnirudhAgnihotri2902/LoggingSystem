@@ -1,4 +1,4 @@
-package logstash_logger
+package logger
 
 func Init(hostname string, port int, connection_type string, timeout int) *Logstash {
 	l := Logstash{}

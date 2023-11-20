@@ -1,29 +1,29 @@
-package logstash_logger
+package logger
 
 func (l *Logstash) Log(payload map[string]interface{}) {
 	l.pushJsonMessage(payload)
 }
 
 func (l *Logstash) Info(payload map[string]interface{}) {
-	payload["severity"] = "INFO"
+	payload["level"] = "INFO"
 	l.pushJsonMessage(payload)
 	delete(payload, "severity")
 }
 
 func (l *Logstash) Debug(payload map[string]interface{}) {
-	payload["severity"] = "DEBUG"
+	payload["level"] = "DEBUG"
 	l.pushJsonMessage(payload)
 	delete(payload, "severity")
 }
 
 func (l *Logstash) Warn(payload map[string]interface{}) {
-	payload["severity"] = "WARN"
+	payload["level"] = "WARN"
 	l.pushJsonMessage(payload)
 	delete(payload, "severity")
 }
 
 func (l *Logstash) Error(payload map[string]interface{}) {
-	payload["severity"] = "ERROR"
+	payload["level"] = "ERROR"
 	l.pushJsonMessage(payload)
 	delete(payload, "severity")
 }

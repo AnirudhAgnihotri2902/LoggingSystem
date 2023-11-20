@@ -1,4 +1,4 @@
-package logstash_logger
+package logger
 
 import (
 	"encoding/json"
